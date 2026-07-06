@@ -1,0 +1,3 @@
+{
+  "extends": "@dubbed-i/config/tsconfig.base.json"
+}

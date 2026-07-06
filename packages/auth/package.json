@@ -1,0 +1,24 @@
+{
+  "name": "@dubbed-i/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@dubbed-i/db": "workspace:*",
+    "@dubbed-i/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@dubbed-i/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
