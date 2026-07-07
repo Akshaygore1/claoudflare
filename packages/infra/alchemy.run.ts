@@ -1,4 +1,5 @@
 import alchemy from "alchemy";
+import { R2Bucket, D1Database } from "alchemy/cloudflare";
 import { ReactRouter } from "alchemy/cloudflare";
 import { Worker } from "alchemy/cloudflare";
 import { config } from "dotenv";
@@ -7,7 +8,15 @@ config({ path: "./.env" });
 config({ path: "../../apps/web/.env" });
 config({ path: "../../apps/server/.env" });
 
-const app = await alchemy("dubbed-i");
+const app = await alchemy("dubbed.ai");
+
+const db = await D1Database("DB", {
+  migrationsDir: "../../packages/db/src/migrations",
+});
+
+const videosBucket = await R2Bucket("videos", {
+  name: "dubbed-ai-source-videos",
+});
 
 export const server = await Worker("server", {
   cwd: "../../apps/server",
@@ -15,10 +24,12 @@ export const server = await Worker("server", {
   compatibility: "node",
   url: true,
   bindings: {
-    DATABASE_URL: alchemy.secret.env.DATABASE_URL!,
+    DB: db,
     CORS_ORIGIN: alchemy.env.CORS_ORIGIN!,
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,
     BETTER_AUTH_URL: alchemy.env.BETTER_AUTH_URL!,
+    ADMIN_EMAIL: alchemy.env.ADMIN_EMAIL ?? "admin@mail.com",
+    VIDEOS_BUCKET: videosBucket,
   },
   dev: {
     port: 3000,

@@ -1,4 +1,4 @@
-# dubbed-i
+# dubbed.ai
 
 This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, React Router, Hono, TRPC, and more.
 
@@ -24,18 +24,42 @@ First, install the dependencies:
 bun install
 ```
 
+Copy the example env files before starting local development:
+
+```bash
+cp apps/server/.env.example apps/server/.env
+cp apps/web/.env.example apps/web/.env
+cp packages/infra/.env.example packages/infra/.env
+```
+
+Fill those local `.env` files with your own values or configure the same variables through Cloudflare/Alchemy secrets for deployment. Never commit real `.env` files. If any credential has appeared in a shared script, log, issue, or commit, rotate it outside the repo.
+
 ## Database Setup
 
 This project uses PostgreSQL with Drizzle ORM.
 
 1. Make sure you have a PostgreSQL database set up.
-2. Update your `apps/server/.env` file with your PostgreSQL connection details.
+2. Update your local `apps/server/.env` file with your PostgreSQL connection details.
 
 3. Apply the schema to your database:
 
 ```bash
 bun run db:push
 ```
+
+## Admin Provisioning
+
+Public sign-up no longer grants admin access based on email. Every new user is created as `role = 'user'` with `approval_status = 'pending'`.
+
+Provision the first admin explicitly after that user signs up:
+
+```sql
+update "user"
+set role = 'admin', approval_status = 'approved', approved_at = now()
+where email = '<admin-email>';
+```
+
+If all admin accounts are removed, recover by promoting an existing user with the same SQL update. If no user exists yet, create one through normal sign-up first, then run the update.
 
 Then, run the development server:
 
@@ -92,7 +116,7 @@ For more details, see the guide on [Deploying to Cloudflare with Alchemy](https:
 ## Project Structure
 
 ```
-dubbed-i/
+dubbed.ai/
 ├── apps/
 │   ├── web/         # Frontend application (React + React Router)
 │   └── server/      # Backend API (Hono, TRPC)

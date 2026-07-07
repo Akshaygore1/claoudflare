@@ -1,14 +1,8 @@
 import { env } from "@dubbed-i/env/server";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/d1";
 
 import * as schema from "./schema";
 
 export function createDb() {
-  const pool = new Pool({
-    connectionString: env.DATABASE_URL || "",
-    maxUses: 1,
-  });
-
-  return drizzle({ client: pool, schema });
+  return drizzle(env.DB, { schema });
 }

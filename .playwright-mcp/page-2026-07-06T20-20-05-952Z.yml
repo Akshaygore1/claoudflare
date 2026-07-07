@@ -1,0 +1,82 @@
+- generic [active] [ref=e1]:
+    - generic [ref=e2]:
+        - banner [ref=e3]:
+            - generic [ref=e4]:
+                - generic [ref=e5]:
+                    - link "Dubbed.i" [ref=e6] [cursor=pointer]:
+                        - /url: /
+                        - img [ref=e8]
+                        - generic [ref=e12]: Dubbed.i
+                    - navigation [ref=e13]:
+                        - link "Home" [ref=e14] [cursor=pointer]:
+                            - /url: /
+                        - link "Dashboard" [ref=e15] [cursor=pointer]:
+                            - /url: /dashboard
+                - generic [ref=e16]:
+                    - button "Toggle theme" [ref=e17]:
+                        - img
+                        - generic [ref=e18]: Toggle theme
+                    - button "Test User" [ref=e161]
+        - main [ref=e20]:
+            - generic [ref=e165]:
+                - generic [ref=e166]:
+                    - generic [ref=e167]:
+                        - heading "Protected Workspace" [level=1] [ref=e168]
+                        - paragraph [ref=e169]: Manage your AI Dubbing project workflows and security settings.
+                    - button "Sign Out" [ref=e170]:
+                        - img
+                        - text: Sign Out
+                - generic [ref=e171]:
+                    - generic [ref=e172]:
+                        - generic [ref=e173]: TU
+                        - generic [ref=e174]:
+                            - generic [ref=e175]:
+                                - heading "Test User" [level=3] [ref=e176]
+                                - generic [ref=e177]:
+                                    - img [ref=e178]
+                                    - text: Verified Session
+                            - generic [ref=e181]:
+                                - generic [ref=e182]:
+                                    - img [ref=e183]
+                                    - generic [ref=e186]: "ID: JWKnOln84CySgZEqZavvEm1p7X57jhKX"
+                                - generic [ref=e187]:
+                                    - img [ref=e188]
+                                    - generic [ref=e191]: test@example.com
+                    - generic [ref=e192]:
+                        - generic [ref=e193]:
+                            - text: Usage Status
+                            - heading "Free Plan" [level=4] [ref=e194]
+                            - paragraph [ref=e195]: Upgrade to unlock high definition 4K processing and unlimited voice clones.
+                        - generic [ref=e197]:
+                            - generic [ref=e198]: Credits Used
+                            - generic [ref=e199]: 0 / 10 mins
+                - generic [ref=e201]:
+                    - generic [ref=e202]:
+                        - generic [ref=e203]:
+                            - img [ref=e205]
+                            - heading "API Gateway Status" [level=3] [ref=e208]
+                        - generic [ref=e209]:
+                            - generic [ref=e212]: Secure RPC Connected
+                            - generic [ref=e213]: '"Welcome to your protected AI Dubbing dashboard! Your session is verified."'
+                        - paragraph [ref=e214]: Gateway responses are signed and checked using better-auth session headers.
+                    - generic [ref=e215]:
+                        - generic [ref=e216]:
+                            - img [ref=e218]
+                            - heading "Quick Workspace Action" [level=3] [ref=e221]
+                        - paragraph [ref=e222]: To begin translating a new video segment, connect your storage buckets or drag files into a workspace instance.
+                        - generic [ref=e223]:
+                            - button "Create New Dubbing Project" [disabled]:
+                                - img
+                                - text: Create New Dubbing Project
+                            - button "Configure Integration Keys" [disabled]:
+                                - img
+                                - text: Configure Integration Keys
+    - region "Notifications alt+T":
+        - list:
+            - listitem [ref=e224]:
+                - img [ref=e226]
+                - generic [ref=e230]: Sign up successful
+    - generic [ref=e44]:
+        - img [ref=e46]
+        - button "Open Tanstack query devtools" [ref=e94] [cursor=pointer]:
+            - img [ref=e95]

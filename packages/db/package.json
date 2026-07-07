@@ -17,14 +17,13 @@
   },
   "dependencies": {
     "@dubbed-i/env": "workspace:*",
-    "dotenv": "catalog:",
     "drizzle-orm": "^0.45.2",
-    "pg": "^8.22.0",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
     "@dubbed-i/config": "workspace:*",
-    "@types/pg": "^8.20.0",
+    "@libsql/client": "^0.17.4",
     "drizzle-kit": "^0.31.10",
     "typescript": "catalog:"
   }

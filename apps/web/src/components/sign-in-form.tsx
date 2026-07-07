@@ -2,16 +2,15 @@ import { Button } from "@dubbed-i/ui/components/button";
 import { Input } from "@dubbed-i/ui/components/input";
 import { Label } from "@dubbed-i/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
 import { authClient } from "@/lib/auth-client";
+import { trpcClient } from "@/utils/trpc";
 
 import Loader from "./loader";
 
 export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
-  const navigate = useNavigate();
   const { isPending } = authClient.useSession();
 
   const form = useForm({
@@ -26,9 +25,11 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
           password: value.password,
         },
         {
-          onSuccess: () => {
-            navigate("/dashboard");
+          onSuccess: async () => {
+            const accountStatus = await trpcClient.getMyAccountStatus.query();
+
             toast.success("Sign in successful");
+            window.location.assign(accountStatus.isAdmin ? "/admin" : "/dashboard");
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
@@ -49,7 +50,7 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
   }
 
   return (
-    <div className="mx-auto w-full mt-10 max-w-md p-6">
+    <div className="mx-auto w-full max-w-md p-6">
       <h1 className="mb-6 text-center text-3xl font-bold">Welcome Back</h1>
 
       <form
@@ -69,13 +70,14 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
                   id={field.name}
                   name={field.name}
                   type="email"
+                  autoComplete="email"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-red-500">
-                    {error?.message}
+                {field.state.meta.errors.map((error, i) => (
+                  <p key={i} className="text-sm text-destructive">
+                    {typeof error === "string" ? error : (error as any)?.message || String(error)}
                   </p>
                 ))}
               </div>
@@ -92,13 +94,14 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
                   id={field.name}
                   name={field.name}
                   type="password"
+                  autoComplete="current-password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-red-500">
-                    {error?.message}
+                {field.state.meta.errors.map((error, i) => (
+                  <p key={i} className="text-sm text-destructive">
+                    {typeof error === "string" ? error : (error as any)?.message || String(error)}
                   </p>
                 ))}
               </div>
@@ -106,11 +109,9 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
           </form.Field>
         </div>
 
-        <form.Subscribe
-          selector={(state) => ({ canSubmit: state.canSubmit, isSubmitting: state.isSubmitting })}
-        >
-          {({ canSubmit, isSubmitting }) => (
-            <Button type="submit" className="w-full" disabled={!canSubmit || isSubmitting}>
+        <form.Subscribe selector={(state) => ({ isSubmitting: state.isSubmitting })}>
+          {({ isSubmitting }) => (
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Submitting..." : "Sign In"}
             </Button>
           )}
@@ -121,7 +122,7 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
         <Button
           variant="link"
           onClick={onSwitchToSignUp}
-          className="text-indigo-600 hover:text-indigo-800"
+          className="text-primary hover:text-primary/80"
         >
           Need an account? Sign Up
         </Button>

@@ -2,7 +2,7 @@ import { Button } from "@dubbed-i/ui/components/button";
 import { Input } from "@dubbed-i/ui/components/input";
 import { Label } from "@dubbed-i/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -11,7 +11,7 @@ import { authClient } from "@/lib/auth-client";
 import Loader from "./loader";
 
 export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
-  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { isPending } = authClient.useSession();
 
   const form = useForm({
@@ -29,8 +29,8 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
         },
         {
           onSuccess: () => {
-            navigate("/dashboard");
-            toast.success("Sign up successful");
+            setIsSubmitted(true);
+            toast.success("Account request submitted");
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
@@ -51,8 +51,23 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
     return <Loader />;
   }
 
+  if (isSubmitted) {
+    return (
+      <div className="mx-auto w-full max-w-md p-6 text-center">
+        <h1 className="mb-4 text-3xl font-bold">Awaiting Approval</h1>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Your account request has been submitted. An admin will review it before you can use the
+          platform.
+        </p>
+        <Button onClick={onSwitchToSignIn} className="mt-6 w-full">
+          Back to Sign In
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto w-full mt-10 max-w-md p-6">
+    <div className="mx-auto w-full max-w-md p-6">
       <h1 className="mb-6 text-center text-3xl font-bold">Create Account</h1>
 
       <form
@@ -71,13 +86,14 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
                 <Input
                   id={field.name}
                   name={field.name}
+                  autoComplete="name"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-red-500">
-                    {error?.message}
+                {field.state.meta.errors.map((error, i) => (
+                  <p key={i} className="text-sm text-destructive">
+                    {typeof error === "string" ? error : (error as any)?.message || String(error)}
                   </p>
                 ))}
               </div>
@@ -94,13 +110,14 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
                   id={field.name}
                   name={field.name}
                   type="email"
+                  autoComplete="email"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-red-500">
-                    {error?.message}
+                {field.state.meta.errors.map((error, i) => (
+                  <p key={i} className="text-sm text-destructive">
+                    {typeof error === "string" ? error : (error as any)?.message || String(error)}
                   </p>
                 ))}
               </div>
@@ -117,13 +134,14 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
                   id={field.name}
                   name={field.name}
                   type="password"
+                  autoComplete="new-password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-red-500">
-                    {error?.message}
+                {field.state.meta.errors.map((error, i) => (
+                  <p key={i} className="text-sm text-destructive">
+                    {typeof error === "string" ? error : (error as any)?.message || String(error)}
                   </p>
                 ))}
               </div>
@@ -131,11 +149,9 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
           </form.Field>
         </div>
 
-        <form.Subscribe
-          selector={(state) => ({ canSubmit: state.canSubmit, isSubmitting: state.isSubmitting })}
-        >
-          {({ canSubmit, isSubmitting }) => (
-            <Button type="submit" className="w-full" disabled={!canSubmit || isSubmitting}>
+        <form.Subscribe selector={(state) => ({ isSubmitting: state.isSubmitting })}>
+          {({ isSubmitting }) => (
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Submitting..." : "Sign Up"}
             </Button>
           )}
@@ -146,7 +162,7 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
         <Button
           variant="link"
           onClick={onSwitchToSignIn}
-          className="text-indigo-600 hover:text-indigo-800"
+          className="text-primary hover:text-primary/80"
         >
           Already have an account? Sign In
         </Button>
