@@ -107,6 +107,55 @@ If you want to add app-specific blocks instead of shared primitives, run the sha
 
 For more details, see the guide on [Deploying to Cloudflare with Alchemy](https://www.better-t-stack.dev/docs/guides/cloudflare-alchemy).
 
+### GitHub Actions CI/CD
+
+The workflow in `.github/workflows/ci.yml` validates every pull request to `main` and deploys production after changes are pushed to `main`. Production deploys use the GitHub Environment named `production`, so you can require manual approval before `bun run deploy` runs.
+
+Validation runs:
+
+```bash
+bun install --frozen-lockfile
+bun run check
+bun run test
+bun run build
+```
+
+Production deployment runs:
+
+```bash
+bun install --frozen-lockfile
+bun run deploy
+```
+
+Set up GitHub Actions:
+
+1. Open your GitHub repository.
+2. Go to `Settings > Actions > General`.
+3. Enable GitHub Actions if it is disabled.
+4. Go to `Settings > Secrets and variables > Actions`.
+5. Add repository secrets named `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, and `BETTER_AUTH_SECRET`.
+6. Add repository variables named `CORS_ORIGIN`, `BETTER_AUTH_URL`, and `ADMIN_EMAIL`.
+7. Go to `Settings > Environments`.
+8. Create an environment named `production`.
+9. Enable required reviewers on the `production` environment if you want manual approval before deploy.
+10. Go to `Settings > Branches`.
+11. Add a branch protection rule for `main`.
+12. Enable `Require status checks to pass before merging` and select the `Validate` check.
+
+Cloudflare token requirements:
+
+- `CLOUDFLARE_ACCOUNT_ID`: your Cloudflare account ID.
+- `CLOUDFLARE_API_TOKEN`: an API token that can manage Cloudflare Workers, D1, and R2 resources for this account.
+- `BETTER_AUTH_SECRET`: a long random secret used by Better Auth.
+
+Deployment environment variables:
+
+- `CORS_ORIGIN`: the production web URL allowed to call the API.
+- `BETTER_AUTH_URL`: the production server URL used by Better Auth.
+- `ADMIN_EMAIL`: the email address to treat as the configured admin email.
+
+`VITE_SERVER_URL` is not required in GitHub because `packages/infra/alchemy.run.ts` binds it from the deployed server URL automatically.
+
 ## Git Hooks and Formatting
 
 - Optional native Vite+ hooks: `bun run hooks:setup`

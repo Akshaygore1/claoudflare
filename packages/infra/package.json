@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "alchemy dev",
+    "dev": "bun ./scripts/repair-local-d1.ts && alchemy dev",
     "deploy": "alchemy deploy",
     "destroy": "alchemy destroy"
   },
