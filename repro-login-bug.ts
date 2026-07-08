@@ -74,10 +74,10 @@ async function main() {
     console.log("Closing browser in 3 seconds...");
     try {
       await page.waitForTimeout(3000);
-    } catch (e) {}
+    } catch {}
     try {
       await browser.close();
-    } catch (e) {}
+    } catch {}
   }
 }
 

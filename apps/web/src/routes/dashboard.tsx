@@ -1,16 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import {
-  CheckCircle2,
-  CloudUpload,
-  Download,
-  LogOut,
-  Plus,
-  ShieldCheck,
-  Trash2,
-  Video,
-} from "lucide-react";
+import { CloudUpload, Download, LogOut, Plus, ShieldCheck, Trash2, Video } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
@@ -268,9 +259,6 @@ export default function Dashboard() {
 
   const uploadedVideos = uploads.data ?? [];
   const hasUploads = uploadedVideos.length > 0;
-  const selectedLanguageName =
-    DUBBING_LANGUAGES.find((language) => language.code === selectedLanguage)?.name ??
-    selectedLanguage;
 
   const renderUploadForm = () => (
     <div className="flex flex-col gap-6">

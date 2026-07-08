@@ -1,5 +1,5 @@
 import { NavLink, Link } from "react-router";
-import { Languages, Video } from "lucide-react";
+import { Languages } from "lucide-react";
 
 import { ModeToggle } from "./mode-toggle";
 import UserMenu from "./user-menu";

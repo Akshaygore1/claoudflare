@@ -1,0 +1,48 @@
+diff --git a/dist/cli/index.js b/dist/cli/index.js
+index decce844c734c4bc30c9cb54f779ddb5fac54489..4ca2dad3a5563072beced93136d4a3c7d33208e8 100644
+--- a/dist/cli/index.js
++++ b/dist/cli/index.js
+@@ -160,7 +160,7 @@ async function createContext({
+       postcss: {}
+     },
+     configFile: false,
+-    envFile: false,
++    envDir: false,
+     plugins: []
+   });
+   await devServer.pluginContainer.buildStart({});
+diff --git a/dist/vite/cloudflare.js b/dist/vite/cloudflare.js
+index 46d22f97d21451a01def73d2fb2cdefdf9dcc543..3e5378a514ded8f78e3b1243d69fc5e378e4e596 100644
+--- a/dist/vite/cloudflare.js
++++ b/dist/vite/cloudflare.js
+@@ -159,7 +159,7 @@ async function createContext({
+       postcss: {}
+     },
+     configFile: false,
+-    envFile: false,
++    envDir: false,
+     plugins: []
+   });
+   await devServer.pluginContainer.buildStart({});
+diff --git a/dist/vite.js b/dist/vite.js
+index 67adb22a93f4860ec7bdfb032c1a2ab0cbfc42b6..62399bb20a9be131babfa3465768692b83c51ee0 100644
+--- a/dist/vite.js
++++ b/dist/vite.js
+@@ -173,7 +173,7 @@ async function createContext({
+       postcss: {}
+     },
+     configFile: false,
+-    envFile: false,
++    envDir: false,
+     plugins: []
+   });
+   await devServer.pluginContainer.buildStart({});
+@@ -3773,7 +3773,7 @@ var reactRouterVitePlugin = () => {
+             hmr: false
+           },
+           configFile: false,
+-          envFile: false,
++          envDir: false,
+           plugins: [
+             childCompilerPlugins.filter(
+               (plugin) => typeof plugin === "object" && plugin !== null && "name" in plugin && plugin.name !== "react-router" && plugin.name !== "react-router:route-exports" && plugin.name !== "react-router:hmr-updates" && plugin.name !== "react-router:validate-plugin-order"
