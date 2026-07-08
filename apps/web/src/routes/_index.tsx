@@ -80,7 +80,7 @@ export default function Home() {
             to={session ? "/dashboard" : "/login"}
             className="hover:text-foreground transition-colors"
           >
-            {session ? "[ Workspace ]" : "[ Login ]"}
+            {session ? " Workspace " : " Login "}
           </Link>
         </div>
       </header>
