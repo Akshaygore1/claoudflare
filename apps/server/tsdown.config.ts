@@ -5,5 +5,8 @@ export default defineConfig({
   format: "esm",
   outDir: "./dist",
   clean: true,
-  noExternal: [/@dubbed-i\/.*/],
+  deps: {
+    alwaysBundle: [/@dubbed-i\/.*/],
+    neverBundle: ["cloudflare:workers"],
+  },
 });
