@@ -1,10 +1,49 @@
 import { Database } from "bun:sqlite";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const rootDir = resolve(import.meta.dir, "../../..");
 const dbDir = join(rootDir, ".alchemy/miniflare/v3/d1/miniflare-D1DatabaseObject");
 const migrationsDir = join(rootDir, "packages/db/src/migrations");
+const infraStateDir = join(rootDir, "packages/infra/.alchemy");
+
+function repairLocalAlchemySecrets() {
+  if (!existsSync(infraStateDir)) {
+    return;
+  }
+
+  const stageDirs = readdirSync(infraStateDir, { recursive: true }).filter((entry) =>
+    entry.endsWith("/server.json"),
+  );
+
+  for (const relativePath of stageDirs) {
+    const filePath = join(infraStateDir, relativePath);
+    const state = JSON.parse(readFileSync(filePath, "utf8")) as {
+      output?: { bindings?: Record<string, unknown> };
+      props?: { bindings?: Record<string, unknown> };
+    };
+
+    let changed = false;
+
+    for (const bindings of [state.output?.bindings, state.props?.bindings]) {
+      const secret = bindings?.BETTER_AUTH_SECRET;
+
+      if (secret && typeof secret === "object" && "@secret" in secret) {
+        delete bindings.BETTER_AUTH_SECRET;
+        changed = true;
+      }
+    }
+
+    if (!changed) {
+      continue;
+    }
+
+    writeFileSync(filePath, `${JSON.stringify(state, null, 2)}\n`);
+    console.log(`Repaired stale Alchemy secret state in ${relativePath}.`);
+  }
+}
+
+repairLocalAlchemySecrets();
 
 if (!existsSync(dbDir) || !existsSync(migrationsDir)) {
   process.exit(0);

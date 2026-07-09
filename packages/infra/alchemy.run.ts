@@ -2,13 +2,19 @@ import alchemy from "alchemy";
 import { R2Bucket, D1Database } from "alchemy/cloudflare";
 import { ReactRouter } from "alchemy/cloudflare";
 import { Worker } from "alchemy/cloudflare";
+import { CloudflareStateStore } from "alchemy/state";
 import { config } from "dotenv";
 
 config({ path: "./.env" });
 config({ path: "../../apps/web/.env" });
 config({ path: "../../apps/server/.env" });
 
-const app = await alchemy("dubbed.ai");
+const app = await alchemy("dubbed.ai", {
+  stateStore:
+    process.env.CI || process.env.ALCHEMY_STATE_TOKEN
+      ? (scope) => new CloudflareStateStore(scope)
+      : undefined,
+});
 
 const db = await D1Database("DB", {
   migrationsDir: "../../packages/db/src/migrations",
