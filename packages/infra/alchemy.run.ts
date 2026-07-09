@@ -22,6 +22,7 @@ const db = await D1Database("DB", {
 
 const videosBucket = await R2Bucket("videos", {
   name: "dubbed-ai-source-videos",
+  adopt: true,
 });
 
 export const server = await Worker("server", {
