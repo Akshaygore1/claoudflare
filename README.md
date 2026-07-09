@@ -133,7 +133,7 @@ Set up GitHub Actions:
 2. Go to `Settings > Actions > General`.
 3. Enable GitHub Actions if it is disabled.
 4. Go to `Settings > Secrets and variables > Actions`.
-5. Add repository secrets named `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, and `BETTER_AUTH_SECRET`.
+5. Add repository secrets named `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `ALCHEMY_PASSWORD`, `ALCHEMY_STATE_TOKEN`, and `BETTER_AUTH_SECRET`.
 6. Add repository variables named `CORS_ORIGIN`, `BETTER_AUTH_URL`, and `ADMIN_EMAIL`.
 7. Go to `Settings > Environments`.
 8. Create an environment named `production`.
@@ -146,6 +146,8 @@ Cloudflare token requirements:
 
 - `CLOUDFLARE_ACCOUNT_ID`: your Cloudflare account ID.
 - `CLOUDFLARE_API_TOKEN`: an API token that can manage Cloudflare Workers, D1, and R2 resources for this account.
+- `ALCHEMY_PASSWORD`: the Alchemy encryption password used to serialize `alchemy.secret.*` values into deployment state. Keep this stable once you start deploying.
+- `ALCHEMY_STATE_TOKEN`: the token Alchemy uses for the Cloudflare-backed remote state store in CI.
 - `BETTER_AUTH_SECRET`: a long random secret used by Better Auth.
 
 Deployment environment variables:
